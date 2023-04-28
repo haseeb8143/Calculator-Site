@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Haseeb Iqbal">
+    <meta name="email" content="iqba0039@algonquinlive.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Roboto';
+        }
+        
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .calculator {
+            background-color: white;
+            width: 300px;
+            box-shadow: 0px 20px 30px 0px rgb(92, 92, 92);
+            height: 430px;
+            border-radius: 5px;
+        }
+
+        .display {
+            text-align: right;
+            height: 50px;
+            line-height: 65px;
+            padding: 15px 20px;
+            font-size: 35px;
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            padding: 20px 30px;
+            justify-content: center;
+        }
+
+        .button, .opp, .clear {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+            border: 1px solid gray;
+            /* border-radius: 10px; */
+            margin: 1px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: rgb(255, 255, 255);
+
+        }
+
+        .button:hover, .opp:hover, .clear:hover {
+            background-color: gray;
+            color: white;
+            transition: 0.3s ease-in-out;
+        }
+
+        #equal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+            border: 1px solid grey;
+            /* border-radius: 10px; */
+            margin: 1px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: rgb(18, 81, 228);
+            color: white;
+        }
+
+        #theme {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+        }
+
+        #theme {
+            height: 30px;
+            width: 30px;
+            border: 1px solid gray;
+            border-radius: 20px;
+            cursor: pointer;
+            color: rgb(0, 0, 0);
+            background-color: rgb(0, 0, 0);
+            margin-left: 25px;
+        }
+
+        #theme:hover {
+            background-color: rgb(255, 255, 255);
+            transition: 0.3s ease-in-out;
+
+        }
+        .dark, .dark .button, .dark .opp, .dark .clear {
+            background-color: black;
+            color: white;
+        }
+        .dark #theme{
+            background-color: white;
+        }
+        .dark #theme:hover{
+            background-color: rgb(0, 0, 0);
+            transition: 0.3s ease-in-out;
+        }
+        .dark .button:hover, .dark .opp:hover, .dark .clear:hover {
+            background-color: rgb(105, 105, 105);
+            transition: 0.3s ease-in-out;
+        }
+        @media only screen and (max-width: 900px) {
+            
+            .calculator {
+                height: 330px;
+                width: 200px;
+            }
+            .button, #equal, .opp, .clear {
+                height: 40px;
+                width: 40px;
+            }
+            #theme{
+                height: 20px;
+                width: 20px;
+            }
+        }
+        
+    </style>
+    <title>Calculator</title>
+</head>
+
+<body>
+    <section class="box">
+        <div class="calculator">
+            <div class="display">
+                0
+            </div>
+            <div class="keypad">
+                <!-- reformat button pad as needed -->
+                <div class="button">7</div>
+                <div class="button">8</div>
+                <div class="button">9</div>
+                <div class="opp">-</div>
+                <div class="button">4</div>
+                <div class="button">5</div>
+                <div class="button">6</div>
+                <div class="opp">/</div>
+                <div class="button">1</div>
+                <div class="button">2</div>
+                <div class="button">3</div>
+                <div class="opp">*</div>
+                <div class="button">0</div>
+                <div class="clear">C</div>
+                <div class="opp">+</div>
+                <div id="equal" >=</div>
+            </div>
+            <div id="theme"></div>
+        </div>
+    </section>
+
+    <script>
+        // theme chnage
+        themeButton = document.getElementById("theme")
+
+        themeButton.onclick = function click() {
+            calc = document.querySelector(".calculator")
+            calc.classList.toggle('dark')
+        }
+        // displaying
+        display = document.querySelector(".display");
+        let buttons = Array.from(document.getElementsByClassName('button'));
+        let equal = document.getElementById('equal');
+        let clear = document.querySelector('.clear');
+        let opps = Array.from(document.getElementsByClassName('opp'));
+        let numsArray = [];
+        fNum = undefined;
+        newNum = undefined;
+        let sum = undefined;
+        
+        
+        // opperator button
+        opps.map( opp => {
+            opp.addEventListener('click', (e) => {
+                fNum = display.innerText
+                numsArray.push(fNum)
+                numsArray.push(e.target.innerText)
+                
+            })
+        })
+        
+        // displaying buttons
+        buttons.map( button => {
+                    button.addEventListener('click', (e) => {
+                    
+                        if (display.innerText == "0") {
+                            display.innerText = ''
+                            display.innerText += e.target.innerText
+                            
+                        }
+                        else if(display.innerText != fNum) {
+                            display.innerText += e.target.innerText
+                        }
+                        else {
+                            display.innerText = ''
+                            display.innerText += e.target.innerText
+                        }
+                        // numsArray.at(-1) == "+" || numsArray.at(-1) == "/" || numsArray.at(-1) == "-" || numsArray.at(-1) == "*"
+                        if(numsArray.at(-1) == '') {
+                            numsArray = []
+                            display.innerText = ''
+                            display.innerText += e.target.innerText
+                        }
+            })}) 
+
+        // equal button
+        equal.addEventListener('click', (e) => {
+            
+            newNum = display.innerText;
+            numsArray.push(newNum)
+            l = numsArray.length
+            emp = ''
+            calculate(numsArray, l)
+            // math function
+            function calculate(numsArray, l)
+            {        
+                if (l === 0) // if string is empty return zero
+                    return 0;
+
+                let s = numsArray[0];   
+                // parseInt function to convert the strings into integers
+                let value = parseInt(s);
+                let sum = value;
+                
+                for (let i = 2; i < l; i = i + 2)
+                {
+                    s = numsArray[i];
+                    // converting string into integer
+                    value = parseInt(s);
+                    // Finding the operator between each number by i - 1
+                    let operation = numsArray[i - 1][0];
+                    if (operation == '+') {
+                        sum += value;
+                    }
+                    else if (operation == '/') {
+                        sum /= value;
+                    }    
+                    else if(operation == '*') {
+                        sum *= value
+                    }
+                    else if(operation == '-')
+                        {sum -= value;} 
+                }
+                
+                display.innerText = sum 
+            }
+
+            sum = display.innerText
+            numsArray.push(emp)
+            
+        })
+
+        // clear function
+        clear.onclick = function() {
+            numsArray = [] 
+            // empty the array to clear evrything
+            display.innerText = '0' 
+            // document.location.reload()
+        }    
+        
+    </script>
+</body>
+
+</html>
